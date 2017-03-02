@@ -8,7 +8,8 @@ var gulp = require('gulp'),
     replace = require('rollup-plugin-replace'),
     uglify = require('rollup-plugin-uglify'),
     progress = require('rollup-plugin-progress'),
-    rollup = require('rollup');
+    rollup = require('rollup'),
+    browserSync = require('browser-sync').create();
 
 var rollupfn = function (env) {
   console.log('[RO] INGING ...');
@@ -62,11 +63,14 @@ gulp.task('styl', function () {
 
 // ------------------------------------------------------------
 
-gulp.task('bulid',['jade','styl'], function () {
+gulp.task('bulid', ['jade', 'styl'], function () {
   return rollupfn('production');
 });
 
 gulp.task('dev', function () {
+  browserSync.init({
+    server: "./dist"
+  });
   // gulp.watch('./src/*.js', rollupfn());
   gulp.watch('./src/*.jade', ['jade']);
   gulp.watch('./src/*.styl', ['styl']);
