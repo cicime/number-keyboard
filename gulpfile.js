@@ -42,18 +42,18 @@ let write = {
 }
 let cache = {};
 
+let bundleWrite = (bundle) => {
+  console.log('[RD]', 'Writing bundle...')
+  cache = bundle;
+  bundle.write(write)
+};
+
 let rollupfn = (env) => {
   console.log('[RO] INGING ...');
   return rollup.rollup(option(env))
       .then(function (bundle) {
         bundle.write(write);
       })
-};
-
-let bundleWrite = (bundle) => {
-  console.log('[RD]', 'Writing bundle...')
-  cache = bundle;
-  bundle.write(write)
 };
 
 // ----------------------- task ------------------------------------------
