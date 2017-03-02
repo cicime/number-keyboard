@@ -1,0 +1,27 @@
+{
+  "name": "number-keyboard",
+  "version": "1.0.0",
+  "description": "keyboard",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "rollup": "^0.41.4"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cicime/number-keyboard.git"
+  },
+  "keywords": [
+    "keyboard"
+  ],
+  "author": "cicime",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cicime/number-keyboard/issues"
+  },
+  "homepage": "https://github.com/cicime/number-keyboard#readme"
+}
