@@ -6,6 +6,8 @@ export default function (config) {
     return
   }
 
+  console.log(this)
+
   const
       _this = this,
       cfg = config,
