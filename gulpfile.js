@@ -89,7 +89,7 @@ gulp.task('bulid', ['jade', 'styl'], () => {
   return rollupfn('production');
 });
 
-gulp.task('dev', ()=> {
+gulp.task('dev', ['jade', 'styl'], ()=> {
   browserSync.init({
     server: "./dist"
   });
