@@ -27,7 +27,8 @@ export default function (e, config) {
   const add = (e, txt) => {
     e.preventDefault();
     e.stopPropagation();
-    _this.value += txt
+    _this.value += txt;
+    !/^\d+\.?\d{0,2}$/.test(_this.value) && minus(e)
   }
 
   const minus = (e) => {

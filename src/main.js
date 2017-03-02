@@ -1,11 +1,10 @@
 import board from './keyboard'
 
 window.keyboard = board;
-if(ENV === 'development'){
+if (ENV === 'development') {
   console.log(`[${ENV}] satarted!`)
 
-  let inp = document.querySelector('.input-hk')
-  inp.onclick = function (e) {
+  document.querySelector('.input-hk').onclick = function (e) {
     keyboard.bind(this)(e);
   };
 }
