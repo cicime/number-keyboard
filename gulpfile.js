@@ -1,6 +1,7 @@
 let gulp = require('gulp'),
     jade = require('gulp-jade'),
     stylus = require('gulp-stylus'),
+    rename = require("gulp-rename"),
     autoprefixer = require('gulp-autoprefixer'),
     babel = require('rollup-plugin-babel'),
     resolve = require('rollup-plugin-node-resolve'),
@@ -74,6 +75,9 @@ gulp.task('styl', () => {
       }))
       .pipe(autoprefixer({
         browsers: ['last 5 versions', 'Android >= 4.0']
+      }))
+      .pipe(rename({
+        suffix: '.min'
       }))
       .pipe(gulp.dest('./dist'));
 });
