@@ -34,6 +34,7 @@ let option = (env) => {
     ]
   }
 };
+
 let write = {
   format: 'iife',
   dest: './dist/keyboard.js',
@@ -57,13 +58,13 @@ let bundleWrite = (bundle) => {
 
 // ----------------------- task ------------------------------------------
 //
-gulp.task('jade', ()=> {
+gulp.task('jade', () => {
   return gulp.src('./src/*.jade')
       .pipe(jade({pretty: true}))
       .pipe(gulp.dest('./dist'));
 });
 
-gulp.task('styl', ()=> {
+gulp.task('styl', () => {
   return gulp.src('./src/*.styl')
       .pipe(stylus({
         compress: true
