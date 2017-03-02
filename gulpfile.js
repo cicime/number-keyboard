@@ -11,27 +11,28 @@ var gulp = require('gulp'),
     rollup = require('rollup'),
     browserSync = require('browser-sync').create();
 
-var env = '';
-var option = {
-  entry: './src/main.js',
-  plugins: [
-    babel({
-      exclude: './node_modules/**'
-    }),
-    commonjs(),
-    resolve({
-      jsnext: true,
-      main: true,
-      browser: !env
-    }),
-    progress({
-      clearLine: false
-    }),
-    replace({
-      ENV: JSON.stringify(env || 'development')
-    }),
-    (env === 'production' && uglify())
-  ]
+var option = env => {
+  return {
+    entry: './src/main.js',
+    plugins: [
+      babel({
+        exclude: './node_modules/**'
+      }),
+      commonjs(),
+      resolve({
+        jsnext: true,
+        main: true,
+        browser: !env
+      }),
+      progress({
+        clearLine: false
+      }),
+      replace({
+        ENV: JSON.stringify(env || 'development')
+      }),
+      (env === 'production' && uglify())
+    ]
+  }
 };
 var write = {
   format: 'iife',
@@ -42,7 +43,7 @@ var cache = {};
 
 var rollupfn = (env)=> {
   console.log('[RO] INGING ...');
-  return rollup.rollup(option)
+  return rollup.rollup(option(env))
       .then(function (bundle) {
         bundle.write(write);
       })
@@ -86,7 +87,7 @@ gulp.task('dev', ()=> {
       .then(bundleWrite)
       .then(() => {
         gulp.watch('./src/*.js').on('change', ()=> {
-          rollup.rollup(Object.assign({}, option, {cache: cache}))
+          rollup.rollup(Object.assign({}, option(), {cache: cache}))
               .then(bundleWrite)
               .then(browserSync.reload)
         });
