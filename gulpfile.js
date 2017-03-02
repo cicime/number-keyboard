@@ -1,9 +1,11 @@
 var gulp = require('gulp'),
+    babel = require('rollup-plugin-babel'),
     rollup = require('rollup');
 
 var rollupfn = function () {
   return rollup.rollup({
-    entry: './src/keyboard.js'
+    entry: './src/keyboard.js',
+    plugins: [babel()]
   })
       .then(function (bundle) {
         bundle.write({
