@@ -1,4 +1,4 @@
-var gulp = require('gulp'),
+let gulp = require('gulp'),
     jade = require('gulp-jade'),
     stylus = require('gulp-stylus'),
     autoprefixer = require('gulp-autoprefixer'),
@@ -11,7 +11,7 @@ var gulp = require('gulp'),
     rollup = require('rollup'),
     browserSync = require('browser-sync').create();
 
-var option = env => {
+let option = (env) => {
   return {
     entry: './src/main.js',
     plugins: [
@@ -34,14 +34,14 @@ var option = env => {
     ]
   }
 };
-var write = {
+let write = {
   format: 'iife',
   dest: './dist/keyboard.js',
   sourceMap: 'inline'
 }
-var cache = {};
+let cache = {};
 
-var rollupfn = (env)=> {
+let rollupfn = (env) => {
   console.log('[RO] INGING ...');
   return rollup.rollup(option(env))
       .then(function (bundle) {
@@ -49,12 +49,14 @@ var rollupfn = (env)=> {
       })
 };
 
-var bundleWrite = (bundle) =>{
+let bundleWrite = (bundle) => {
   console.log('[RD]', 'Writing bundle...')
   cache = bundle;
   bundle.write(write)
 };
 
+// ----------------------- task ------------------------------------------
+//
 gulp.task('jade', ()=> {
   return gulp.src('./src/*.jade')
       .pipe(jade({pretty: true}))
@@ -72,9 +74,10 @@ gulp.task('styl', ()=> {
       .pipe(gulp.dest('./dist'));
 });
 
-// ------------------------------------------------------------
 
-gulp.task('bulid', ['jade', 'styl'], ()=> {
+// ----------------------- work ------------------------------------------
+//
+gulp.task('bulid', ['jade', 'styl'], () => {
   return rollupfn('production');
 });
 
@@ -83,16 +86,16 @@ gulp.task('dev', ()=> {
     server: "./dist"
   });
 
-  rollup.rollup(option)
+  let opd = option();
+  rollup.rollup(opd)
       .then(bundleWrite)
       .then(() => {
         gulp.watch('./src/*.js').on('change', ()=> {
-          rollup.rollup(Object.assign({}, option(), {cache: cache}))
+          rollup.rollup(Object.assign({}, opd, {cache}))
               .then(bundleWrite)
-              .then(browserSync.reload)
         });
       });
   gulp.watch('./src/*.jade', ['jade']);
   gulp.watch('./src/*.styl', ['styl']);
-  gulp.watch('./dist/*.(css|html)').on('change', browserSync.reload);
+  gulp.watch('./dist/**').on('change', browserSync.reload);
 });
