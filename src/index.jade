@@ -24,4 +24,11 @@ html
             .modinput
                 span.keyboard-txt-hk
             input.input.input-hk(readonly)
+        script(src='fastclick.js')
+        script.
+            if ('addEventListener' in document) {
+                document.addEventListener('DOMContentLoaded', function () {
+                    window.FastClick && FastClick.attach(document.body);
+                }, false);
+            }
         script(src='keyboard.js')
