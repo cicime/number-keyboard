@@ -35,24 +35,27 @@ let option = (env) => {
   }
 };
 
-let write = {
-  format: 'iife',
-  dest: './dist/keyboard.js',
-  sourceMap: 'inline'
-}
 let cache = {};
 
 let bundleWrite = (bundle) => {
   console.log('[RD]', 'Writing bundle...')
   cache = bundle;
-  bundle.write(write)
+  bundle.write({
+    format: 'iife',
+    dest: './dist/keyboard.js',
+    sourceMap: 'inline'
+  })
 };
 
 let rollupfn = (env) => {
   console.log('[RO] INGING ...');
   return rollup.rollup(option(env))
       .then(function (bundle) {
-        bundle.write(Object.assign({}, write, {sourceMap: false}));
+        bundle.write({
+          format: 'iife',
+          dest: './dist/keyboard.min.js',
+          sourceMap: false
+        });
       })
 };
 
