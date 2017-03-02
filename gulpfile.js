@@ -67,7 +67,7 @@ gulp.task('bulid',['jade','styl'], function () {
 });
 
 gulp.task('dev', function () {
-  gulp.watch('./src/*.js', rollupfn());
+  // gulp.watch('./src/*.js', rollupfn());
   gulp.watch('./src/*.jade', ['jade']);
   gulp.watch('./src/*.styl', ['styl']);
 });
