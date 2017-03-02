@@ -1,15 +1,15 @@
 'use strict'
 export default function (e, config) {
-  e.preventDefault();
-  e.stopPropagation();
+  e.preventDefault()
+  e.stopPropagation()
 
-  const _this = this;
+  const _this = this
 
   const init = () => {
     let ele = document.querySelector('.keyboard')
     if (ele) {
       ele.style.display = 'block'
-      createFlash();
+      createFlash(_this.value)
       return
     }
 
@@ -26,16 +26,20 @@ export default function (e, config) {
     e.stopPropagation();
     _this.value += txt;
     !/^\d+\.?\d{0,2}$/.test(_this.value) && minus(e)
-    createFlash()
+    createFlash(_this.value)
   }
 
   const minus = (e) => {
     e.preventDefault();
     e.stopPropagation();
     _this.value && (_this.value = _this.value.replace(/.$/, ''))
+    createFlash(_this.value)
   }
 
-  const createFlash = () => {
+  const createFlash = (txt) => {
+
+    document.querySelector('.keyboard-txt-hk').innerHTML = txt || ''
+
     removeFlash();
     let newflash = document.createElement('sapn')
     newflash.className = 'keyboard-flash'

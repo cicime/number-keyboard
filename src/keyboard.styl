@@ -7,9 +7,6 @@
   text-align center
   font-size: 32px
   line-height: 45px
-  span
-    background: #f0f0f0
-    margin 0 1px
 
 .keyboard
   position fixed
@@ -43,11 +40,10 @@
   &-flash
     color: blue
     animation flash .8s linear infinite
-
-@keyframes flash
-  0%
-    opacity 0
-  50%
-    opacity 1
-  100%
-    opacity 0
+  @keyframes flash
+    0%
+      opacity 0
+    50%
+      opacity 1
+    100%
+      opacity 0
