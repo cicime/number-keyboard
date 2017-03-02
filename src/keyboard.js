@@ -8,7 +8,7 @@ export default function (config) {
 
   const
       _this = this,
-      cfg = Object.assign({}, config),
+      cfg = config,
       key = [
         [1, 2, 3],
         [4, 5, 6],
@@ -26,7 +26,7 @@ export default function (config) {
   }
 
   const minus = () => {
-    _this.value && (_this.value = _this.value.replace(/.$/,''))
+    _this.value && (_this.value = _this.value.replace(/.$/, ''))
   }
 
   for (let i = 0; i < key.length; i++) {
@@ -36,9 +36,9 @@ export default function (config) {
           txt = key[i][j]
       td.innerHTML = txt
       td.className = 'keyboard-key'
-      if(txt === 'back'){
+      if (txt === 'back') {
         td.onclick = minus
-      }else{
+      } else {
         td.onclick = add.bind(this, txt)
       }
       row.appendChild(td)
