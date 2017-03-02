@@ -52,7 +52,7 @@ let rollupfn = (env) => {
   console.log('[RO] INGING ...');
   return rollup.rollup(option(env))
       .then(function (bundle) {
-        bundle.write(write);
+        bundle.write(Object.assign({}, write, {sourceMap: false}));
       })
 };
 
