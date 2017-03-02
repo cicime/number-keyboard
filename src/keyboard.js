@@ -2,5 +2,5 @@
 
 export default function (config) {
   const cfg = Object.assign({}, config)
-  console.log(5)
+  console.log(23)
 }

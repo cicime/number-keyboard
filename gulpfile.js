@@ -11,45 +11,56 @@ var gulp = require('gulp'),
     rollup = require('rollup'),
     browserSync = require('browser-sync').create();
 
-var rollupfn = function (env) {
+var env = '';
+var option = {
+  entry: './src/main.js',
+  plugins: [
+    babel({
+      exclude: './node_modules/**'
+    }),
+    commonjs(),
+    resolve({
+      jsnext: true,
+      main: true,
+      browser: !env
+    }),
+    progress({
+      clearLine: false
+    }),
+    replace({
+      ENV: JSON.stringify(env || 'development')
+    }),
+    (env === 'production' && uglify())
+  ]
+};
+var write = {
+  format: 'iife',
+  dest: './dist/keyboard.js',
+  sourceMap: 'inline'
+}
+var cache = {};
+
+var rollupfn = (env)=> {
   console.log('[RO] INGING ...');
-  return rollup.rollup({
-    entry: './src/main.js',
-    plugins: [
-      babel({
-        exclude: './node_modules/**'
-      }),
-      commonjs(),
-      resolve({
-        jsnext: true,
-        main: true,
-        browser: !env
-      }),
-      progress({
-        clearLine: false
-      }),
-      replace({
-        ENV: JSON.stringify(env || 'development')
-      }),
-      (env === 'production' && uglify())
-    ]
-  })
+  return rollup.rollup(option)
       .then(function (bundle) {
-        bundle.write({
-          format: 'iife',
-          dest: './dist/keyboard.js',
-          sourceMap: 'inline'
-        });
+        bundle.write(write);
       })
 };
 
-gulp.task('jade', function () {
+var bundleWrite = (bundle) =>{
+  console.log('[RD]', 'Writing bundle...')
+  cache = bundle;
+  bundle.write(write)
+};
+
+gulp.task('jade', ()=> {
   return gulp.src('./src/*.jade')
       .pipe(jade({pretty: true}))
       .pipe(gulp.dest('./dist'));
 });
 
-gulp.task('styl', function () {
+gulp.task('styl', ()=> {
   return gulp.src('./src/*.styl')
       .pipe(stylus({
         compress: true
@@ -60,18 +71,27 @@ gulp.task('styl', function () {
       .pipe(gulp.dest('./dist'));
 });
 
-
 // ------------------------------------------------------------
 
-gulp.task('bulid', ['jade', 'styl'], function () {
+gulp.task('bulid', ['jade', 'styl'], ()=> {
   return rollupfn('production');
 });
 
-gulp.task('dev', function () {
+gulp.task('dev', ()=> {
   browserSync.init({
     server: "./dist"
   });
-  // gulp.watch('./src/*.js', rollupfn());
+
+  rollup.rollup(option)
+      .then(bundleWrite)
+      .then(() => {
+        gulp.watch('./src/*.js').on('change', ()=> {
+          rollup.rollup(Object.assign({}, option, {cache: cache}))
+              .then(bundleWrite)
+              .then(browserSync.reload)
+        });
+      });
   gulp.watch('./src/*.jade', ['jade']);
   gulp.watch('./src/*.styl', ['styl']);
+  gulp.watch('./dist/*.(css|html)').on('change', browserSync.reload);
 });
