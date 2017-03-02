@@ -8,17 +8,18 @@ var gulp = require('gulp'),
     rollup = require('rollup');
 
 var rollupfn = function (env) {
+  console.log('[RO] INGING ...');
   return rollup.rollup({
-    entry: './src/keyboard.js',
+    entry: './src/main.js',
     plugins: [
       babel({
-        exclude: 'node_modules/**',
+        exclude: './node_modules/**'
       }),
       commonjs(),
       resolve({
         jsnext: true,
         main: true,
-        browser: true,
+        browser: !env
       }),
       progress({
         clearLine: false
@@ -33,11 +34,15 @@ var rollupfn = function (env) {
         bundle.write({
           format: 'iife',
           dest: './dist/keyboard.js',
-          sourceMap: true
+          sourceMap: 'inline'
         });
       })
 };
 
-gulp.task('build', function () {
+gulp.task('bulid', function () {
   return rollupfn('production');
+});
+
+gulp.task('dev', function () {
+  gulp.watch('./src/*.js', rollupfn());
 });
