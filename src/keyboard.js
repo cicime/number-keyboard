@@ -1,5 +1,8 @@
 'use strict'
-export default function (config) {
+export default function (e, config) {
+  e.preventDefault();
+  e.stopPropagation();
+
   let ele = document.querySelector('.keyboard')
   if (ele) {
     ele.style.display = 'block'
@@ -23,11 +26,15 @@ export default function (config) {
   html.className = 'keyboard'
   table.className = 'keyboard-table'
 
-  const add = (txt) => {
+  const add = (e, txt) => {
+    e.preventDefault();
+    e.stopPropagation();
     _this.value += txt
   }
 
-  const minus = () => {
+  const minus = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
     _this.value && (_this.value = _this.value.replace(/.$/, ''))
   }
 
@@ -41,7 +48,9 @@ export default function (config) {
       if (txt === 'back') {
         td.onclick = minus
       } else {
-        td.onclick = add.bind(this, txt)
+        td.onclick = e => {
+          add(e, txt)
+        }
       }
       row.appendChild(td)
     }
@@ -50,4 +59,8 @@ export default function (config) {
 
   html.appendChild(table)
   document.body.appendChild(html)
+
+  document.onclick = function () {
+    document.querySelector('.keyboard').style.display = 'none'
+  };
 }
