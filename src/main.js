@@ -5,5 +5,7 @@ if(ENV === 'development'){
   console.log(`[${ENV}] satarted!`)
 
   let inp = document.querySelector('.input-hk')
-  inp.onclick = window.keyboard
+  inp.onclick = function (e) {
+    keyboard.bind(this)(e);
+  };
 }
