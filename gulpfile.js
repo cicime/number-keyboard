@@ -1,5 +1,7 @@
 var gulp = require('gulp'),
     jade = require('gulp-jade'),
+    stylus = require('gulp-stylus'),
+    autoprefixer = require('gulp-autoprefixer'),
     babel = require('rollup-plugin-babel'),
     resolve = require('rollup-plugin-node-resolve'),
     commonjs = require('rollup-plugin-commonjs'),
@@ -46,14 +48,26 @@ gulp.task('jade', function () {
       .pipe(gulp.dest('./dist'));
 });
 
+gulp.task('styl', function () {
+  return gulp.src('./src/*.styl')
+      .pipe(stylus({
+        compress: true
+      }))
+      .pipe(autoprefixer({
+        browsers: ['last 5 versions', 'Android >= 4.0']
+      }))
+      .pipe(gulp.dest('./dist'));
+});
+
 
 // ------------------------------------------------------------
 
-gulp.task('bulid',['jade'], function () {
+gulp.task('bulid',['jade','styl'], function () {
   return rollupfn('production');
 });
 
 gulp.task('dev', function () {
   gulp.watch('./src/*.js', rollupfn());
   gulp.watch('./src/*.jade', ['jade']);
+  gulp.watch('./src/*.styl', ['styl']);
 });
