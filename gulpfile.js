@@ -1,11 +1,33 @@
 var gulp = require('gulp'),
     babel = require('rollup-plugin-babel'),
+    resolve = require('rollup-plugin-node-resolve'),
+    commonjs = require('rollup-plugin-commonjs'),
+    replace = require('rollup-plugin-replace'),
+    uglify  = require('rollup-plugin-uglify'),
+    progress = require('rollup-plugin-progress'),
     rollup = require('rollup');
 
-var rollupfn = function () {
+var rollupfn = function (env) {
   return rollup.rollup({
     entry: './src/keyboard.js',
-    plugins: [babel()]
+    plugins: [
+      babel({
+        exclude: 'node_modules/**',
+      }),
+      commonjs(),
+      resolve({
+        jsnext: true,
+        main: true,
+        browser: true,
+      }),
+      progress({
+        clearLine: false
+      }),
+      replace({
+        ENV: JSON.stringify(env || 'development')
+      }),
+      (env === 'production' && uglify())
+    ]
   })
       .then(function (bundle) {
         bundle.write({
@@ -17,5 +39,5 @@ var rollupfn = function () {
 };
 
 gulp.task('build', function () {
-  return rollupfn();
+  return rollupfn('production');
 });
