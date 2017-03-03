@@ -1,0 +1,85 @@
+(function () {
+'use strict';
+
+var keyboard = function (numInput) {
+  var _this = this,
+      _input = $(numInput)[0],
+      touch = 'touchend click';
+
+  var dep = function dep(e) {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  var _init = function _init(e) {
+    dep(e);
+    createFlash(_input.value);
+    $('.keyboard-hk').show();
+  };
+
+  var add = function add(e) {
+    dep(e);
+    _input.value += e.data.txt;
+    !/^\d+\.?\d{0,2}$/.test(_input.value) && minus(e);
+    createFlash(_input.value);
+  };
+
+  var minus = function minus(e) {
+    dep(e);
+    _input.value && (_input.value = _input.value.replace(/.$/, ''));
+    createFlash(_input.value);
+  };
+
+  var createFlash = function createFlash(val) {
+    $('.keyboard-txt-hk').html(val || '');
+    !$('.keyboard-flash').length && _this.append('<span class="keyboard-flash">|</span>');
+  };
+
+  var removeFlash = function removeFlash() {
+    return $('.keyboard-flash').remove();
+  };
+
+  var dom = function dom() {
+    var key = [[1, 2, 3], [4, 5, 6], [7, 8, 9], [0, '.', 'back']],
+        html = $('<div class="keyboard keyboard-hk" hidden></div>'),
+        table = $('<table class="keyboard-table"></table>');
+
+    for (var i = 0; i < key.length; i++) {
+      var row = $('<tr></tr>');
+      for (var j = 0; j < key[i].length; j++) {
+        var txt = key[i][j],
+            td = $('<td class="keyboard-key">' + txt + '</td>');
+        txt === 'back' ? td.on(touch, minus) : td.on(touch, { txt: txt }, add);
+        row.append(td);
+      }
+      table.append(row);
+    }
+    html.append(table);
+    $('body').append(html);
+
+    _this.append('<span class="keyboard-txt-hk"></span>');
+  };
+
+  dom();
+
+  _this.on(touch, _init);
+  $(document).on(touch, function () {
+    removeFlash();
+    $('.keyboard-hk').hide();
+  });
+
+  return this;
+};
+
+$(function () {
+  $.fn.extend({ keyboard: keyboard });
+
+  {
+    console.log('[' + "development" + '] satarted!');
+
+    $('.modinput').keyboard('.input-hk');
+  }
+});
+
+}());
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoia2V5Ym9hcmQuanMiLCJzb3VyY2VzIjpbIi4uL3NyYy9rZXlib2FyZC5wbHVzLmpzIiwiLi4vc3JjL21haW4uanMiXSwic291cmNlc0NvbnRlbnQiOlsiJ3VzZSBzdHJpY3QnO1xyXG5leHBvcnQgZGVmYXVsdCBmdW5jdGlvbiAobnVtSW5wdXQpIHtcclxuICBjb25zdFxyXG4gICAgICBfdGhpcyA9IHRoaXMsXHJcbiAgICAgIF9pbnB1dCA9ICQobnVtSW5wdXQpWzBdLFxyXG4gICAgICB0b3VjaCA9ICd0b3VjaGVuZCBjbGljaydcclxuXHJcbiAgY29uc3QgZGVwID0gKGUpID0+IHtcclxuICAgIGUucHJldmVudERlZmF1bHQoKVxyXG4gICAgZS5zdG9wUHJvcGFnYXRpb24oKVxyXG4gIH1cclxuXHJcbiAgY29uc3QgX2luaXQgPSAoZSkgPT4ge1xyXG4gICAgZGVwKGUpXHJcbiAgICBjcmVhdGVGbGFzaChfaW5wdXQudmFsdWUpXHJcbiAgICAkKCcua2V5Ym9hcmQtaGsnKS5zaG93KClcclxuICB9XHJcblxyXG4gIGNvbnN0IGFkZCA9IChlKSA9PiB7XHJcbiAgICBkZXAoZSlcclxuICAgIF9pbnB1dC52YWx1ZSArPSBlLmRhdGEudHh0XHJcbiAgICAhL15cXGQrXFwuP1xcZHswLDJ9JC8udGVzdChfaW5wdXQudmFsdWUpICYmIG1pbnVzKGUpXHJcbiAgICBjcmVhdGVGbGFzaChfaW5wdXQudmFsdWUpXHJcbiAgfVxyXG5cclxuICBjb25zdCBtaW51cyA9IChlKSA9PiB7XHJcbiAgICBkZXAoZSlcclxuICAgIF9pbnB1dC52YWx1ZSAmJiAoX2lucHV0LnZhbHVlID0gX2lucHV0LnZhbHVlLnJlcGxhY2UoLy4kLywgJycpKVxyXG4gICAgY3JlYXRlRmxhc2goX2lucHV0LnZhbHVlKVxyXG4gIH1cclxuXHJcbiAgY29uc3QgY3JlYXRlRmxhc2ggPSAodmFsKSA9PiB7XHJcbiAgICAkKCcua2V5Ym9hcmQtdHh0LWhrJykuaHRtbCh2YWwgfHwgJycpXHJcbiAgICAhJCgnLmtleWJvYXJkLWZsYXNoJykubGVuZ3RoICYmIF90aGlzLmFwcGVuZCgnPHNwYW4gY2xhc3M9XCJrZXlib2FyZC1mbGFzaFwiPnw8L3NwYW4+JylcclxuICB9XHJcblxyXG4gIGNvbnN0IHJlbW92ZUZsYXNoID0gKCkgPT4gJCgnLmtleWJvYXJkLWZsYXNoJykucmVtb3ZlKCk7XHJcblxyXG4gIGNvbnN0IGRvbSA9ICgpID0+IHtcclxuICAgIGNvbnN0XHJcbiAgICAgICAga2V5ID0gW1xyXG4gICAgICAgICAgWzEsIDIsIDNdLFxyXG4gICAgICAgICAgWzQsIDUsIDZdLFxyXG4gICAgICAgICAgWzcsIDgsIDldLFxyXG4gICAgICAgICAgWzAsICcuJywgJ2JhY2snXVxyXG4gICAgICAgIF0sXHJcbiAgICAgICAgaHRtbCA9ICQoJzxkaXYgY2xhc3M9XCJrZXlib2FyZCBrZXlib2FyZC1oa1wiIGhpZGRlbj48L2Rpdj4nKSxcclxuICAgICAgICB0YWJsZSA9ICQoJzx0YWJsZSBjbGFzcz1cImtleWJvYXJkLXRhYmxlXCI+PC90YWJsZT4nKVxyXG5cclxuICAgIGZvciAobGV0IGkgPSAwOyBpIDwga2V5Lmxlbmd0aDsgaSsrKSB7XHJcbiAgICAgIGxldCByb3cgPSAkKCc8dHI+PC90cj4nKVxyXG4gICAgICBmb3IgKGxldCBqID0gMDsgaiA8IGtleVtpXS5sZW5ndGg7IGorKykge1xyXG4gICAgICAgIGxldCB0eHQgPSBrZXlbaV1bal0sXHJcbiAgICAgICAgICAgIHRkID0gJCgnPHRkIGNsYXNzPVwia2V5Ym9hcmQta2V5XCI+JyArIHR4dCArICc8L3RkPicpO1xyXG4gICAgICAgIHR4dCA9PT0gJ2JhY2snID8gdGQub24odG91Y2gsIG1pbnVzKSA6IHRkLm9uKHRvdWNoLCB7dHh0fSwgYWRkKTtcclxuICAgICAgICByb3cuYXBwZW5kKHRkKVxyXG4gICAgICB9XHJcbiAgICAgIHRhYmxlLmFwcGVuZChyb3cpXHJcbiAgICB9XHJcbiAgICBodG1sLmFwcGVuZCh0YWJsZSlcclxuICAgICQoJ2JvZHknKS5hcHBlbmQoaHRtbClcclxuXHJcbiAgICBfdGhpcy5hcHBlbmQoJzxzcGFuIGNsYXNzPVwia2V5Ym9hcmQtdHh0LWhrXCI+PC9zcGFuPicpXHJcbiAgfVxyXG5cclxuICBkb20oKTtcclxuXHJcbiAgX3RoaXMub24odG91Y2gsIF9pbml0KVxyXG4gICQoZG9jdW1lbnQpLm9uKHRvdWNoLCAoKSA9PiB7XHJcbiAgICByZW1vdmVGbGFzaCgpXHJcbiAgICAkKCcua2V5Ym9hcmQtaGsnKS5oaWRlKClcclxuICB9KTtcclxuXHJcbiAgcmV0dXJuIHRoaXM7XHJcbn07IiwiaW1wb3J0IGtleWJvYXJkIGZyb20gJy4va2V5Ym9hcmQucGx1cydcclxuXHJcbiQoZnVuY3Rpb24gKCkge1xyXG4gICQuZm4uZXh0ZW5kKHsga2V5Ym9hcmQgfSlcclxuICBcclxuICBpZiAoRU5WID09PSAnZGV2ZWxvcG1lbnQnKSB7XHJcbiAgICBjb25zb2xlLmxvZyhgWyR7RU5WfV0gc2F0YXJ0ZWQhYClcclxuXHJcbiAgICAkKCcubW9kaW5wdXQnKS5rZXlib2FyZCgnLmlucHV0LWhrJylcclxuICB9XHJcbn0pIl0sIm5hbWVzIjpbIm51bUlucHV0IiwiX3RoaXMiLCJfaW5wdXQiLCIkIiwidG91Y2giLCJkZXAiLCJlIiwicHJldmVudERlZmF1bHQiLCJzdG9wUHJvcGFnYXRpb24iLCJfaW5pdCIsInZhbHVlIiwic2hvdyIsImFkZCIsImRhdGEiLCJ0eHQiLCJ0ZXN0IiwibWludXMiLCJyZXBsYWNlIiwiY3JlYXRlRmxhc2giLCJ2YWwiLCJodG1sIiwibGVuZ3RoIiwiYXBwZW5kIiwicmVtb3ZlRmxhc2giLCJyZW1vdmUiLCJkb20iLCJrZXkiLCJ0YWJsZSIsImkiLCJyb3ciLCJqIiwidGQiLCJvbiIsImRvY3VtZW50IiwiaGlkZSIsImZuIiwiZXh0ZW5kIiwia2V5Ym9hcmQiLCJFTlYiLCJsb2ciXSwibWFwcGluZ3MiOiI7OztBQUNBLGVBQWUsVUFBVUEsUUFBVixFQUFvQjtNQUU3QkMsUUFBUSxJQURaO01BRUlDLFNB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

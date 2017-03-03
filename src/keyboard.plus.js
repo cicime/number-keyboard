@@ -51,8 +51,8 @@ export default function (numInput) {
       let row = $('<tr></tr>')
       for (let j = 0; j < key[i].length; j++) {
         let txt = key[i][j],
-            td = $('<td class="keyboard-key">' + txt + '</td>');
-        txt === 'back' ? td.on(touch, minus) : td.on(touch, {txt}, add);
+            td = $('<td class="keyboard-key">' + txt + '</td>')
+        txt === 'back' ? td.on(touch, minus) : td.on(touch, {txt}, add)
         row.append(td)
       }
       table.append(row)
