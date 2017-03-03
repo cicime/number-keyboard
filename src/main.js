@@ -1,12 +1,11 @@
-import board from './keyboard'
+import keyboard from './keyboard.plus'
 
-window.keyboard = board;
-if (ENV === 'development') {
-  console.log(`[${ENV}] satarted!`)
+$(function () {
+  $.fn.extend({ keyboard })
+  
+  if (ENV === 'development') {
+    console.log(`[${ENV}] satarted!`)
 
-  document.querySelector('.input-hk').onclick = function (e) {
-    keyboard.bind(this)(e, {
-      mod: '.modinput'
-    });
-  };
-}
+    $('.modinput').keyboard('.input-hk')
+  }
+})
