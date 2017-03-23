@@ -61,7 +61,7 @@ let rollupfn = (env) => {
 };
 
 // ----------------------- task ------------------------------------------
-//
+
 gulp.task('jade', () => {
   return gulp.src('./src/*.jade')
       .pipe(jade({pretty: true}))
@@ -84,7 +84,7 @@ gulp.task('styl', () => {
 
 
 // ----------------------- work ------------------------------------------
-//
+
 gulp.task('bulid', ['jade', 'styl'], () => {
   return rollupfn('production');
 });
