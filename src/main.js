@@ -5,7 +5,5 @@ $(function () {
   
   if (ENV === 'development') {
     console.log(`[${ENV}] satarted!`)
-
-    $('.modinput').keyboard('.input-hk')
   }
 })

@@ -34,6 +34,7 @@ export default function (numInput) {
   const createFlash = (val) => {
     $('.keyboard-txt-hk').html(val || '')
     !$('.keyboard-flash').length && _this.append('<span class="keyboard-flash">|</span>')
+    _this.trigger('kb.tap')
   }
 
   const removeFlash = () => $('.keyboard-flash').remove();
