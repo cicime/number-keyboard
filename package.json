@@ -23,7 +23,7 @@
     "rollup-plugin-uglify": "^1.0.1"
   },
   "scripts": {
-    "bulid": "gulp bulid",
+    "build": "gulp build",
     "dev": "gulp dev"
   },
   "repository": {

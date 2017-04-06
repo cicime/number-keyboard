@@ -85,7 +85,7 @@ gulp.task('styl', () => {
 
 // ----------------------- work ------------------------------------------
 
-gulp.task('bulid', ['jade', 'styl'], () => {
+gulp.task('build', ['jade', 'styl'], () => {
   return rollupfn('production');
 });
 

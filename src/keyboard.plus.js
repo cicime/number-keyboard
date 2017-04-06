@@ -2,6 +2,7 @@
 export default function (numInput) {
   const
       _this = this,
+      _tip = this.html(),
       _input = $(numInput)[0],
       touch = 'touchend click'
 
@@ -14,6 +15,7 @@ export default function (numInput) {
     dep(e)
     createFlash(_input.value)
     $('.keyboard-hk').show()
+    $('.keyboard-txt-hod').hide()
   }
 
   const add = (e) => {
@@ -60,7 +62,9 @@ export default function (numInput) {
     html.append(table)
     $('body').append(html)
 
+    _this.html('')
     _this.append('<span class="keyboard-txt-hk"></span>')
+    _this.append('<span class="keyboard-txt-hod">' + _tip + '</span>')
   }
 
   dom();
@@ -69,6 +73,7 @@ export default function (numInput) {
   $(document).on(touch, () => {
     removeFlash()
     $('.keyboard-hk').hide()
+    !_input.value && $('.keyboard-txt-hod').show()
   });
 
   return this;
