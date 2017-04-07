@@ -1,4 +1,4 @@
-import keyboard from './keyboard.plus'
+import keyboard from './keyboard'
 
 $(function () {
   $.fn.extend({ keyboard })

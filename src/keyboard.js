@@ -1,56 +1,43 @@
-'use strict'
-export default function (e, config) {
-  e.preventDefault()
-  e.stopPropagation()
+'use strict';
+export default function (numInput) {
+  const
+      _this = this,
+      _tip = this.html(),
+      _input = $(numInput)[0],
+      touch = 'touchend click'
 
-  const _this = this
-
-  const init = () => {
-    let ele = document.querySelector('.keyboard')
-    if (ele) {
-      ele.style.display = 'block'
-      createFlash(_this.value)
-      return
-    }
-
-    dom()
-
-    document.onclick = function () {
-      document.querySelector('.keyboard').style.display = 'none'
-      removeFlash();
-    };
+  const dep = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
   }
 
-  const add = (e, txt) => {
-    e.preventDefault();
-    e.stopPropagation();
-    _this.value += txt;
-    !/^\d+\.?\d{0,2}$/.test(_this.value) && minus(e)
-    createFlash(_this.value)
+  const _init = (e) => {
+    dep(e)
+    createFlash(_input.value)
+    $('.keyboard-hk').show()
+    $('.keyboard-txt-hod').hide()
+  }
+
+  const add = (e) => {
+    dep(e)
+    _input.value += e.data.txt
+    !/^\d+\.?\d{0,2}$/.test(_input.value) && minus(e)
+    createFlash(_input.value)
   }
 
   const minus = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    _this.value && (_this.value = _this.value.replace(/.$/, ''))
-    createFlash(_this.value)
+    dep(e)
+    _input.value && (_input.value = _input.value.replace(/.$/, ''))
+    createFlash(_input.value)
   }
 
-  const createFlash = (txt) => {
+  const createFlash = (val) => {
+    $('.keyboard-txt-hk').html(val || '')
+    !$('.keyboard-flash').length && _this.append('<span class="keyboard-flash">|</span>')
+    _this.trigger('kb.tap', val)
+  }
 
-    document.querySelector('.keyboard-txt-hk').innerHTML = txt || ''
-
-    removeFlash();
-    let newflash = document.createElement('sapn')
-    newflash.className = 'keyboard-flash'
-    newflash.innerHTML = '|'
-    document.querySelector(config.mod).appendChild(newflash)
-  };
-
-  const removeFlash = () => {
-    let flash = document.querySelector('.keyboard-flash');
-    flash && document.querySelector(config.mod).removeChild(flash);
-  };
+  const removeFlash = () => $('.keyboard-flash').remove();
 
   const dom = () => {
     const
@@ -60,36 +47,35 @@ export default function (e, config) {
           [7, 8, 9],
           [0, '.', 'back']
         ],
-        html = document.createElement('div'),
-        table = document.createElement('table')
-
-    html.className = 'keyboard'
-    table.className = 'keyboard-table'
+        html = $('<div class="keyboard keyboard-hk" hidden></div>'),
+        table = $('<table class="keyboard-table"></table>')
 
     for (let i = 0; i < key.length; i++) {
-      let row = document.createElement('tr')
+      let row = $('<tr></tr>')
       for (let j = 0; j < key[i].length; j++) {
-        let td = document.createElement('td'),
-            txt = key[i][j]
-        td.innerHTML = txt
-        td.className = 'keyboard-key'
-        if (txt === 'back') {
-          td.onclick = minus
-        } else {
-          td.onclick = e => {
-            add(e, txt)
-          }
-        }
-        row.appendChild(td)
+        let txt = key[i][j],
+            td = $('<td class="keyboard-key">' + txt + '</td>')
+        txt === 'back' ? td.on(touch, minus) : td.on(touch, {txt}, add)
+        row.append(td)
       }
-      table.appendChild(row)
+      table.append(row)
     }
+    html.append(table)
+    $('body').append(html)
 
-    html.appendChild(table)
-    document.body.appendChild(html)
-
-    createFlash()
+    _this.html('')
+    _this.append('<span class="keyboard-txt-hk"></span>')
+    _this.append('<span class="keyboard-txt-hod">' + _tip + '</span>')
   }
 
-  init();
-}
+  dom();
+
+  _this.on(touch, _init)
+  $(document).on(touch, () => {
+    removeFlash()
+    $('.keyboard-hk').hide()
+    !_input.value && $('.keyboard-txt-hod').show()
+  });
+
+  return this;
+};

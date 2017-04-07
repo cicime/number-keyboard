@@ -71,7 +71,7 @@ gulp.task('jade', () => {
 gulp.task('styl', () => {
   return gulp.src('./src/*.styl')
       .pipe(stylus({
-        compress: true
+        compress: false
       }))
       .pipe(autoprefixer({
         browsers: ['last 5 versions', 'Android >= 4.0']
