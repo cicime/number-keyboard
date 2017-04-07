@@ -1,7 +1,7 @@
 import keyboard from './keyboard'
 
 $(function () {
-  $.fn.extend({ keyboard })
+  $.extend($.fn, { keyboard })
   
   if (ENV === 'development') {
     console.log(`[${ENV}] satarted!`)
