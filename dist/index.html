@@ -30,8 +30,8 @@
     <script src="keyboard.js"></script>
     <script>
       $(function () {
-          $('.modinput').keyboard('.input-hk').on('kb.tap', function () {
-              console.log('kb.tap')
+          $('.modinput').keyboard('.input-hk').on('kb.tap', function (e, value) {
+              console.log('kb.tap:' + value)
           })
       })
     </script>
