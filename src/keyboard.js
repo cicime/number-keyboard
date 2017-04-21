@@ -1,3 +1,7 @@
+/**
+ * author cicime
+ * ver 1.2.0
+ */
 'use strict';
 export default function (numInput) {
   const
